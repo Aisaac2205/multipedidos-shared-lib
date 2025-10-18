@@ -1,0 +1,15 @@
+# Common Library - Variables de Entorno
+# Este componente no requiere variables de entorno para Railway
+# Es una dependencia Maven que se compila e instala localmente
+
+# Información del Proyecto
+PROJECT_NAME=multipedidos-common-lib
+PROJECT_VERSION=1.0.0
+JAVA_VERSION=17
+
+# Notas:
+# - Esta librería se instala con: mvn clean install
+# - Los microservicios la consumen como dependencia Maven
+# - No requiere despliegue independiente en Railway
+# - Renombrar este archivo a .env.example si es necesario
+
