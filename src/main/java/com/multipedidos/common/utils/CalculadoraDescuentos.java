@@ -1,7 +1,10 @@
 package com.multipedidos.common.utils;
 
+import com.multipedidos.common.dto.ProductoDTO;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -111,6 +114,30 @@ public class CalculadoraDescuentos {
      */
     public static BigDecimal obtenerPorcentajeIVA() {
         return IVA.multiply(new BigDecimal("100"));
+    }
+
+    /**
+     * Calcula el total de una lista de productos aplicando descuentos e IVA.
+     *
+     * @param productos Lista de productos con nombre y precio
+     * @return Total final con descuentos e IVA aplicados
+     * @throws IllegalArgumentException si la lista es nula o vacía
+     */
+    public static BigDecimal calcularTotal(List<ProductoDTO> productos) {
+        if (productos == null || productos.isEmpty()) {
+            throw new IllegalArgumentException("La lista de productos no puede ser nula o vacía");
+        }
+
+        // Calcular subtotal sumando precios
+        BigDecimal subtotal = productos.stream()
+                .map(ProductoDTO::getPrecio)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        log.info("Subtotal calculado para " + productos.size() + " productos: " + subtotal);
+
+        // Aplicar lógica de descuentos + IVA
+        return calcularTotalFinal(subtotal);
     }
 }
 

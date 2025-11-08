@@ -96,5 +96,49 @@ public class ValidadorCodigos {
             throw new IllegalArgumentException(nombreCampo + " no puede ser nulo o vacío");
         }
     }
+
+    /**
+     * Genera un código único basado en el tipo de entidad y un ID.
+     *
+     * @param tipoEntidad Tipo de entidad (PEDIDO/PED o FACTURA/FAC, case-insensitive)
+     * @param id ID numérico para el código
+     * @return Código formateado según el tipo
+     * @throws IllegalArgumentException si el tipo no es válido o el ID es inválido
+     */
+    public static String generarCodigoUnico(String tipoEntidad, Long id) {
+        if (tipoEntidad == null || tipoEntidad.trim().isEmpty()) {
+            throw new IllegalArgumentException("El tipo de entidad no puede ser nulo o vacío");
+        }
+
+        if (id == null || id < 0) {
+            throw new IllegalArgumentException("El ID debe ser un número positivo");
+        }
+
+        String tipo = tipoEntidad.trim().toUpperCase();
+
+        switch (tipo) {
+            case "PEDIDO":
+            case "PED":
+                return generarCodigoPedido(id);
+            case "FACTURA":
+            case "FAC":
+                return generarCodigoFactura(id);
+            default:
+                throw new IllegalArgumentException("Tipo de entidad no soportado: " + tipoEntidad +
+                    ". Tipos válidos: PEDIDO, PED, FACTURA, FAC");
+        }
+    }
+
+    /**
+     * Genera un código único basado en el tipo de entidad usando timestamp actual.
+     *
+     * @param tipoEntidad Tipo de entidad (PEDIDO/PED o FACTURA/FAC, case-insensitive)
+     * @return Código formateado usando timestamp
+     * @throws IllegalArgumentException si el tipo no es válido
+     */
+    public static String generarCodigoUnico(String tipoEntidad) {
+        long timestamp = System.currentTimeMillis() % 1000000; // Últimos 6 dígitos del timestamp
+        return generarCodigoUnico(tipoEntidad, timestamp);
+    }
 }
 
